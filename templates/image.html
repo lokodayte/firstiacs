@@ -2,38 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Image Encryption</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- iOS specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <div class="container">
         <h1>Image Encryption/Decryption</h1>
 
         {% if message %}
-            <p class="message">{{ message }}</p>
+            <div class="message {{ 'success' if 'success' in message|lower else 'error' }}">{{ message }}</div>
         {% endif %}
 
-        <form method="POST" enctype="multipart/form-data">
-            <label for="file">Choose file:</label>
-            <input type="file" id="file" name="file" accept=".enc,.jpg,.jpeg,.png,.heic">
+        <form method="POST" enctype="multipart/form-data" class="encryption-form">
+            <!-- Improved file selection with iOS support -->
+            <div class="file-input-container">
+                <label for="file" class="file-input-label">
+                    <span class="file-input-button">Choose Image File</span>
+                    <span class="file-input-hint">(.jpg, .png, .heic or .enc)</span>
+                </label>
+                <input type="file" id="file" name="file" accept=".enc,.jpg,.jpeg,.png,.heic,image/*" class="hidden-file-input">
+                <div id="fileNameDisplay" class="file-name-display">No file selected</div>
+            </div>
 
-            <!-- REMOVED: The block that displayed "Using uploaded file: filename" -->
-            <!-- {% if uploaded_filename %}
-                <input type="hidden" name="uploaded_filename_hidden" value="{{ uploaded_filename }}">
-                <p>Using uploaded file: <strong>{{ uploaded_filename }}</strong></p>
-            {% endif %} -->
+            <!-- Password field with toggle visibility -->
+            <div class="password-container">
+                <label for="password">Password:</label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="password" name="password" value="{{ password_value }}" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+                </div>
+            </div>
 
-            <label for="password">Password:</label>
-            <!-- The value attribute is dynamically set by Flask's password_value -->
-            <!-- If password_value is '', the field will be empty. -->
-            <input type="password" id="password" name="password" value="{{ password_value }}" required>
-
-            <button type="submit" name="action" value="encrypt">Encrypt</button>
-            <button type="submit" name="action" value="decrypt">Decrypt</button>
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button type="submit" name="action" value="encrypt" class="btn-encrypt">
+                    <span class="button-icon">🔒</span> Encrypt
+                </button>
+                <button type="submit" name="action" value="decrypt" class="btn-decrypt">
+                    <span class="button-icon">🔓</span> Decrypt
+                </button>
+            </div>
         </form>
 
-        <p><a href="{{ url_for('index') }}">Back to Home</a></p>
+        <!-- iOS specific instructions -->
+        <div class="ios-instructions">
+            <h3>iPhone Users Note:</h3>
+            <ol>
+                <li>Tap "Choose Image File"</li>
+                <li>Select "Browse" if needed</li>
+                <li>Choose from "Photo Library" or "Files"</li>
+                <li>Select your image (.jpg, .png, .heic) or .enc file</li>
+            </ol>
+        </div>
+
+        <p class="home-link"><a href="{{ url_for('index') }}">← Back to Home</a></p>
     </div>
+
+    <script>
+        // Display selected file name
+        document.getElementById('file').addEventListener('change', function(e) {
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            if (this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+                fileNameDisplay.classList.add('has-file');
+            } else {
+                fileNameDisplay.textContent = 'No file selected';
+                fileNameDisplay.classList.remove('has-file');
+            }
+        });
+
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.textContent = '👁️';
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
+
+        // Show iOS instructions only on iOS devices
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            document.querySelector('.ios-instructions').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
