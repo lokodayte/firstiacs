@@ -11,17 +11,20 @@ body {
     text-align: center;
     width: 90%;
     max-width: 600px;
-    margin: 50px auto;
+    margin: 30px auto;
     background-color: #fff;
-    padding: 30px 40px;
+    padding: 25px 20px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 /* Heading */
 h1 {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 1.8rem;
+    line-height: 1.3;
 }
 
 /* General form styling */
@@ -31,6 +34,7 @@ form {
     align-items: center;
     gap: 15px;
     margin-top: 20px;
+    width: 100%;
 }
 
 /* Inputs and textarea */
@@ -38,20 +42,21 @@ textarea,
 input[type="password"],
 input[type="file"] {
     width: 100%;
-    max-width: 500px;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
 /* Stylish buttons */
 button {
-    width: 220px;
+    width: 100%;
+    max-width: 220px;
     padding: 12px 0;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     background: linear-gradient(135deg, #4CAF50, #388E3C);
     color: white;
@@ -62,12 +67,7 @@ button {
 button:hover {
     background: linear-gradient(135deg, #45a049, #2e7d32);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* File input spacing */
-input[type="file"] {
-    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Message box */
@@ -78,8 +78,8 @@ input[type="file"] {
     padding: 10px;
     border-radius: 6px;
     width: 100%;
-    max-width: 500px;
     text-align: center;
+    font-size: 0.95rem;
 }
 
 /* Labels */
@@ -88,7 +88,7 @@ label {
     display: block;
     text-align: left;
     width: 100%;
-    max-width: 500px;
+    font-size: 0.95rem;
 }
 
 /* Centered button links (homepage) */
@@ -97,20 +97,23 @@ label {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin-top: 40px;
     gap: 20px;
 }
 
 /* Homepage navigation buttons */
 .button-link {
-    padding: 15px 30px;
+    width: 100%;
+    max-width: 260px;
+    padding: 15px;
     background-color: #4CAF50;
     color: white;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 1rem;
     border-radius: 6px;
     display: inline-block;
     transition: background-color 0.3s ease;
+    text-align: center;
 }
 
 .button-link:hover {
@@ -125,4 +128,32 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+        margin: 20px 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    button,
+    .button-link {
+        max-width: 100%;
+        font-size: 1rem;
+    }
+
+    textarea,
+    input[type="password"],
+    input[type="file"] {
+        font-size: 1rem;
+    }
+
+    label {
+        font-size: 0.9rem;
+    }
 }
