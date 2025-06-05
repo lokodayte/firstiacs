@@ -276,7 +276,5 @@ def image():
                          password_value=password_value)
 
 if __name__ == '__main__':
-    # Run the Flask application.
-    # debug=True is useful for development (auto-reloads, shows errors),
-    # but should be set to False in a production environment for security.
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=10000, debug=True)
+
