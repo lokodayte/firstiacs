@@ -1,98 +1,216 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Image Encryption</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- iOS specific meta tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-</head>
-<body>
-    <div class="container">
-        <h1>Image Encryption/Decryption</h1>
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
 
-        {% if message %}
-            <div class="message {{ 'success' if 'success' in message|lower else 'error' }}">{{ message }}</div>
-        {% endif %}
+/* Container box - original index page style */
+.container {
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 25px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
 
-        <form method="POST" enctype="multipart/form-data" class="encryption-form">
-            <!-- Improved file selection with iOS support -->
-            <div class="file-input-container">
-                <label for="file" class="file-input-label">
-                    <span class="file-input-button">Choose Image File</span>
-                    <span class="file-input-hint">(.jpg, .png, .heic or .enc)</span>
-                </label>
-                <input type="file" id="file" name="file" accept=".enc,.jpg,.jpeg,.png,.heic,image/*" class="hidden-file-input">
-                <div id="fileNameDisplay" class="file-name-display">No file selected</div>
-            </div>
+/* Heading - original style */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    line-height: 1.3;
+}
 
-            <!-- Password field with toggle visibility -->
-            <div class="password-container">
-                <label for="password">Password:</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="password" name="password" value="{{ password_value }}" required>
-                    <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
-                </div>
-            </div>
+/* Original button-link style (EXACTLY AS WAS) */
+.button-link {
+    width: 100%;
+    max-width: 260px;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 6px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    margin: 5px 0;
+}
 
-            <!-- Action buttons -->
-            <div class="action-buttons">
-                <button type="submit" name="action" value="encrypt" class="btn-encrypt">
-                    <span class="button-icon">🔒</span> Encrypt
-                </button>
-                <button type="submit" name="action" value="decrypt" class="btn-decrypt">
-                    <span class="button-icon">🔓</span> Decrypt
-                </button>
-            </div>
-        </form>
+.button-link:hover {
+    background-color: #45a049;
+}
 
-        <!-- iOS specific instructions -->
-        <div class="ios-instructions">
-            <h3>iPhone Users Note:</h3>
-            <ol>
-                <li>Tap "Choose Image File"</li>
-                <li>Select "Browse" if needed</li>
-                <li>Choose from "Photo Library" or "Files"</li>
-                <li>Select your image (.jpg, .png, .heic) or .enc file</li>
-            </ol>
-        </div>
+/* Original button container */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 20px;
+}
 
-        <p class="home-link"><a href="{{ url_for('index') }}">← Back to Home</a></p>
-    </div>
+.copyright {
+    margin-top: 40px;
+    color: #666;
+    font-size: 0.9rem;
+}
 
-    <script>
-        // Display selected file name
-        document.getElementById('file').addEventListener('change', function(e) {
-            const fileNameDisplay = document.getElementById('fileNameDisplay');
-            if (this.files.length > 0) {
-                fileNameDisplay.textContent = this.files[0].name;
-                fileNameDisplay.classList.add('has-file');
-            } else {
-                fileNameDisplay.textContent = 'No file selected';
-                fileNameDisplay.classList.remove('has-file');
-            }
-        });
+/* Encryption/Decryption page specific styles */
+.file-input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+}
 
-        // Toggle password visibility
-        function togglePasswordVisibility() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.querySelector('.toggle-password');
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.textContent = '👁️';
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.textContent = '👁️';
-            }
-        }
+.styled-file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
 
-        // Show iOS instructions only on iOS devices
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-            document.querySelector('.ios-instructions').style.display = 'block';
-        }
-    </script>
-</body>
-</html>
+.file-input-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+
+.file-input-text {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.file-input-button {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.file-name-display {
+    width: 100%;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+.file-name-display.has-file {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* Form elements */
+label {
+    font-weight: bold;
+    display: block;
+    text-align: left;
+    width: 100%;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Message styling */
+.message {
+    color: #006600;
+    background-color: #e6ffe6;
+    border: 1px solid #b3ffb3;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+/* iOS instructions */
+.ios-instructions {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+    text-align: left;
+}
+
+.ios-instructions h3 {
+    margin-top: 0;
+    color: #4CAF50;
+    font-size: 1rem;
+}
+
+.ios-instructions ol {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.ios-instructions li {
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+        margin: 20px 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .button-link {
+        max-width: 100%;
+    }
+
+    .file-input-custom {
+        padding: 10px;
+    }
+
+    .file-input-button {
+        padding: 6px 12px;
+    }
+}
