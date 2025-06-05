@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Encryption</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Image Encryption/Decryption</h1>
+
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            <label for="file">Choose file:</label>
+            <input type="file" id="file" name="file" accept=".enc,.jpg,.jpeg,.png,.heic">
+
+            <!-- REMOVED: The block that displayed "Using uploaded file: filename" -->
+            <!-- {% if uploaded_filename %}
+                <input type="hidden" name="uploaded_filename_hidden" value="{{ uploaded_filename }}">
+                <p>Using uploaded file: <strong>{{ uploaded_filename }}</strong></p>
+            {% endif %} -->
+
+            <label for="password">Password:</label>
+            <!-- The value attribute is dynamically set by Flask's password_value -->
+            <!-- If password_value is '', the field will be empty. -->
+            <input type="password" id="password" name="password" value="{{ password_value }}" required>
+
+            <button type="submit" name="action" value="encrypt">Encrypt</button>
+            <button type="submit" name="action" value="decrypt">Decrypt</button>
+        </form>
+
+        <p><a href="{{ url_for('index') }}">Back to Home</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureText</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>SecureText</h1>
+            <a href="{{ url_for('text') }}" class="button-link">Text Encryption/Decryption</a>
+            <a href="{{ url_for('image') }}" class="button-link">Image Encryption/Decryption</a>
+    </div>
+</body>
+</html>

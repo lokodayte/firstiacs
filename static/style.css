@@ -1,0 +1,128 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container box */
+.container {
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* General form styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Inputs and textarea */
+textarea,
+input[type="password"],
+input[type="file"] {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+/* Stylish buttons */
+button {
+    width: 220px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #45a049, #2e7d32);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* File input spacing */
+input[type="file"] {
+    padding: 10px;
+}
+
+/* Message box */
+.message {
+    color: #006600;
+    background-color: #e6ffe6;
+    border: 1px solid #b3ffb3;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    display: block;
+    text-align: left;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Centered button links (homepage) */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 20px;
+}
+
+/* Homepage navigation buttons */
+.button-link {
+    padding: 15px 30px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 6px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.button-link:hover {
+    background-color: #45a049;
+}
+
+/* General anchor styles */
+a {
+    text-decoration: none;
+    color: #4CAF50;
+}
+
+a:hover {
+    text-decoration: underline;
+}

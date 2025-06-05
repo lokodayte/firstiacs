@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encryption</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Text Encryption/Decryption</h1>
+
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        <form method="post">
+            <label for="text_input">Text:</label><br>
+            <textarea id="text_input" name="text" rows="10" cols="50">{{ result or '' }}</textarea><br><br>
+
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" value="{{ password_value }}" required><br><br>
+
+            <button type="submit" name="action" value="encrypt" class="text_button">Encrypt</button>
+            <button type="submit" name="action" value="decrypt" class="text_button">Decrypt</button>
+
+            <!-- New Copy Button - only show if there's a result to copy -->
+            {% if result %}
+                <button type="button" id="copyButton" class="text_button">Copy</button>
+            {% endif %}
+        </form>
+
+        <p><a href="{{ url_for('index') }}">Back to Home</a></p>
+    </div>
+
+    <script>
+        // JavaScript to handle copying text to clipboard and hiding the button
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyButton = document.getElementById('copyButton');
+            const textArea = document.getElementById('text_input');
+
+            if (copyButton && textArea) {
+                copyButton.addEventListener('click', function() {
+                    textArea.select(); // Select the text in the textarea
+                    textArea.setSelectionRange(0, 99999); // For mobile devices
+
+                    try {
+                        document.execCommand('copy');
+                        // Successfully copied, now hide the button
+                        copyButton.style.display = 'none'; // Hide the button
+                        console.log('Text copied successfully and button hidden.');
+
+                        // Optional: You might want to show a temporary "Copied!" message
+                        // and then hide it, or just hide the button directly.
+                        // For this request, we'll just hide the button.
+
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                        // If copy failed, you might choose not to hide the button,
+                        // or provide different feedback. For now, it will remain visible.
+                        copyButton.textContent = 'Failed to Copy!';
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copy'; // Reset text if copy failed
+                        }, 2000);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
