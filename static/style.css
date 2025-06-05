@@ -1,197 +1,241 @@
-/* Global styles */
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f5f5f7;
     margin: 0;
     padding: 0;
-    min-height: 100vh;
+    color: #333;
+    line-height: 1.6;
 }
 
-/* Container box */
 .container {
-    text-align: center;
-    width: 90%;
     max-width: 600px;
     margin: 20px auto;
-    background-color: #fff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Heading */
 h1 {
     text-align: center;
+    color: #2c3e50;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+/* File Input Styling */
+.file-input-container {
     margin-bottom: 20px;
-    font-size: 1.8rem;
-    line-height: 1.3;
 }
 
-/* General form styling */
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px;
-    width: 100%;
+.file-input-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
 }
 
-/* Inputs and textarea */
-textarea,
-input[type="password"],
-input[type="file"] {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
+.hidden-file-input {
+    display: none;
+}
+
+.file-input-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #007aff;
+    color: white;
     border-radius: 8px;
-    font-size: 1rem;
-    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
 }
 
-/* Stylish buttons */
-button {
-    width: 100%;
-    max-width: 220px;
-    padding: 12px 0;
+.file-input-button:hover {
+    background-color: #0062cc;
+}
+
+.file-input-hint {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.file-name-display {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+.file-name-display.has-file {
+    color: #007aff;
+    font-weight: 500;
+}
+
+/* Password Field Styling */
+.password-container {
+    margin-bottom: 20px;
+}
+
+.password-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Button Styling */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.action-buttons button {
+    flex: 1;
+    padding: 14px;
     border: none;
     border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    background: linear-gradient(135deg, #4CAF50, #388E3C);
-    color: white;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin: 5px 0;
-}
-
-button:hover {
-    background: linear-gradient(135deg, #45a049, #2e7d32);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Message box */
-.message {
-    color: #006600;
-    background-color: #e6ffe6;
-    border: 1px solid #b3ffb3;
-    padding: 10px;
-    border-radius: 6px;
-    width: 100%;
-    text-align: center;
-    font-size: 0.95rem;
-    margin: 10px 0;
-}
-
-/* Labels */
-label {
-    font-weight: bold;
-    display: block;
-    text-align: left;
-    width: 100%;
-    font-size: 0.95rem;
-    margin-bottom: 5px;
-}
-
-/* Centered button links (homepage) */
-.button-container {
+    transition: all 0.3s;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
-    gap: 15px;
-    width: 100%;
+    gap: 8px;
 }
 
-/* Homepage navigation buttons */
-.button-link {
-    width: 100%;
-    max-width: 260px;
-    padding: 15px;
-    background-color: #4CAF50;
+.btn-encrypt {
+    background-color: #34c759;
     color: white;
-    text-decoration: none;
-    font-size: 1rem;
-    border-radius: 6px;
-    display: inline-block;
-    transition: background-color 0.3s ease;
+}
+
+.btn-decrypt {
+    background-color: #007aff;
+    color: white;
+}
+
+.btn-encrypt:hover {
+    background-color: #248a3d;
+}
+
+.btn-decrypt:hover {
+    background-color: #0062cc;
+}
+
+.button-icon {
+    font-size: 18px;
+}
+
+/* Message Styling */
+.message {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* iOS Instructions */
+.ios-instructions {
+    display: none;
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007aff;
+}
+
+.ios-instructions h3 {
+    margin-top: 0;
+    color: #007aff;
+    font-size: 16px;
+}
+
+.ios-instructions ol {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.ios-instructions li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* Home Link */
+.home-link {
     text-align: center;
-    box-sizing: border-box;
+    margin-top: 25px;
 }
 
-.button-link:hover {
-    background-color: #45a049;
-}
-
-/* General anchor styles */
-a {
+.home-link a {
+    color: #007aff;
     text-decoration: none;
-    color: #4CAF50;
+    font-weight: 500;
 }
 
-a:hover {
+.home-link a:hover {
     text-decoration: underline;
 }
 
-/* Responsive tweaks */
+/* Responsive Adjustments */
 @media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-    
     .container {
+        margin: 10px;
         padding: 15px;
-        margin: 10px auto;
-        width: 95%;
     }
-
+    
     h1 {
-        font-size: 1.5rem;
-        margin-bottom: 15px;
-    }
-
-    button,
-    .button-link {
-        max-width: 100%;
-        font-size: 1rem;
-        padding: 12px;
-    }
-
-    .button-container {
-        margin-top: 20px;
-        gap: 12px;
-    }
-
-    textarea,
-    input[type="password"],
-    input[type="file"] {
-        font-size: 1rem;
-    }
-
-    label {
-        font-size: 0.9rem;
+        font-size: 20px;
     }
     
-    form {
-        gap: 12px;
-        margin-top: 15px;
-    }
-}
-
-/* For very small screens */
-@media (max-width: 350px) {
-    h1 {
-        font-size: 1.3rem;
+    .action-buttons {
+        flex-direction: column;
+        gap: 10px;
     }
     
-    .container {
-        padding: 12px;
+    .action-buttons button {
+        width: 100%;
     }
     
-    button, .button-link {
-        padding: 10px;
+    .file-input-button {
+        padding: 14px 20px;
     }
 }
