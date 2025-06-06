@@ -20,7 +20,51 @@ body {
     box-sizing: border-box;
 }
 
+/* iOS specific styles */
+.ios-instructions {
+    display: none;
+    background-color: #f8f9fa;
+    border-left: 4px solid #007aff;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
 
+.ios-instructions h3 {
+    color: #007aff;
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.ios-instructions ol {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.ios-instructions li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* Make file input more visible on iOS */
+.hidden-file-input {
+    position: absolute;
+    width: 100%;
+    height: 44px; /* Minimum tap target size for iOS */
+    opacity: 0;
+    z-index: 2;
+}
+
+.file-input-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    min-height: 44px;
+}
 
 
 /* Heading */
