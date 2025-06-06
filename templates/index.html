@@ -4,13 +4,6 @@
     <meta charset="UTF-8">
     <title>SecureText</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script>
-    // Check if we should show loading screen
-    if(!sessionStorage.getItem('loadingShown')) {
-        sessionStorage.setItem('loadingShown', 'true');
-        window.location.href = "loading.html";
-    }
-</script>
 </head>
 <body>
     <div class="container">
@@ -20,4 +13,3 @@
     </div>
 </body>
 </html>
-
