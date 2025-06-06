@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <title>SecureText</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+    // Check if we should show loading screen
+    if(!sessionStorage.getItem('loadingShown')) {
+        sessionStorage.setItem('loadingShown', 'true');
+        window.location.href = "loading.html";
+    }
+</script>
 </head>
 <body>
     <div class="container">
         <h1>SecureText</h1>
             <a href="{{ url_for('text') }}" class="button-link">Text Encryption/Decryption</a>
-            <a href="{{ url_for('image') }}" class="button-link">Image Encryption/Decryption</a>
+            <a href="{{ url_for('image') }}" class="button-link" id="image-button">Image Encryption/Decryption</a>
     </div>
 </body>
 </html>
+
