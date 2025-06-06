@@ -35,6 +35,31 @@
 
         <p><a href="{{ url_for('index') }}">Back to Home</a></p>
     </div>
+    <div class="file-input-container">
+    <label for="file">Choose encrypted file:</label>
+    <div class="file-input-wrapper">
+        <input type="file" id="file" name="file" 
+               accept=".enc,application/octet-stream" 
+               class="hidden-file-input">
+        <span class="file-input-custom">
+            <span class="file-input-text">Select .enc file</span>
+            <span class="file-input-button">Browse</span>
+        </span>
+    </div>
+    <div id="fileNameDisplay" class="file-name-display"></div>
+</div>
+
+<!-- iOS specific instructions -->
+<div class="ios-instructions">
+    <h3>Can't find your .enc file?</h3>
+    <ol>
+        <li>Tap "Browse" button</li>
+        <li>At the top, tap "Browse"</li>
+        <li>Select "On My iPhone"</li>
+        <li>Navigate to where you saved the file</li>
+        <li>If needed, enable "All Files" view</li>
+    </ol>
+</div>
 
     <script>
         // Preserve the selected file if there's an error
@@ -55,6 +80,29 @@
                 fileInput.parentNode.insertBefore(fileDisplay, fileInput.nextSibling);
             {% endif %}
         });
+        document.addEventListener('DOMContentLoaded', function() {
+    // Show iOS instructions only on iOS devices
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.querySelector('.ios-instructions').style.display = 'block';
+        
+        // Enhance file input for iOS
+        const fileInput = document.getElementById('file');
+        fileInput.setAttribute('webkitdirectory', '');
+        fileInput.setAttribute('directory', '');
+    }
+
+    // File selection handler
+    document.getElementById('file').addEventListener('change', function(e) {
+        const display = document.getElementById('fileNameDisplay');
+        if (this.files.length > 0) {
+            display.textContent = 'Selected: ' + this.files[0].name;
+            display.classList.add('has-file');
+        } else {
+            display.textContent = '';
+            display.classList.remove('has-file');
+        }
+    });
+});
     </script>
 </body>
 </html>
