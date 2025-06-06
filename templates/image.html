@@ -76,6 +76,20 @@
             fileInput.parentNode.insertBefore(fileDisplay, fileInput.nextSibling);
             {% endif %}
         });
+        // Clear form fields after successful encryption/decryption
+        {% if message and 'successfully' in message|lower %}
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.getElementById('file');
+            const passwordInput = document.getElementById('password');
+        
+            // Only clear if inputs are not disabled (fileInput may be disabled if reused)
+            if (!fileInput.hasAttribute('disabled')) {
+                fileInput.value = '';
+            }
+            passwordInput.value = '';
+        });
+        {% endif %}
+
     </script>
 </body>
 </html>
