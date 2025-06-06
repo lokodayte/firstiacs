@@ -14,8 +14,7 @@
             <p class="message">{{ message }}</p>
             {% if 'wrong password' in message|lower %}
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // Clear only the password field when page loads with wrong password message
+                    document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById('password').value = '';
                     });
                 </script>
@@ -24,7 +23,12 @@
 
         <form method="POST" enctype="multipart/form-data" id="imageForm">
             <label for="file">Choose file:</label>
-            <input type="file" id="file" name="file" accept="*/*">
+            <input type="file" id="file" name="file" accept="*/*" {% if uploaded_filename %}disabled{% endif %}>
+
+            {% if uploaded_filename %}
+                <input type="hidden" name="uploaded_filename" value="{{ uploaded_filename }}">
+                <p><strong>Previously selected file:</strong> {{ uploaded_filename }}</p>
+            {% endif %}
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" value="{{ password_value }}" required>
@@ -37,22 +41,38 @@
     </div>
 
     <script>
-        // Preserve the selected file if there's an error
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if there was a form submission with error
+        document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('imageForm');
             const fileInput = document.getElementById('file');
-            
-            // This would need server-side implementation to repopulate the file input
-            // Since browsers don't allow setting file input value directly for security
-            
-            // Alternative: Show the filename if available
+
+            form.addEventListener('submit', function (e) {
+                const file = fileInput.files[0];
+
+                // Skip validation if file is reused from previous upload
+                {% if not uploaded_filename %}
+                if (!file) {
+                    alert("Please select a file.");
+                    e.preventDefault();
+                    return;
+                }
+
+                const allowedExtensions = ['.jpg', '.jpeg', '.png', '.heic', '.enc'];
+                const fileName = file.name.toLowerCase();
+                const isValid = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                if (!isValid) {
+                    alert("Invalid file type. You can only choose .jpg, .jpeg, .png, .heic, or .enc files.");
+                    e.preventDefault();
+                }
+                {% endif %}
+            });
+
+            // Show file name if available
             {% if uploaded_filename %}
-                // Create a visual indication of the selected file
-                const fileDisplay = document.createElement('div');
-                fileDisplay.className = 'file-display';
-                fileDisplay.textContent = 'Selected file: {{ uploaded_filename }}';
-                fileInput.parentNode.insertBefore(fileDisplay, fileInput.nextSibling);
+            const fileDisplay = document.createElement('div');
+            fileDisplay.className = 'file-display';
+            fileDisplay.textContent = 'Selected file: {{ uploaded_filename }}';
+            fileInput.parentNode.insertBefore(fileDisplay, fileInput.nextSibling);
             {% endif %}
         });
     </script>
