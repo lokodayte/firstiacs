@@ -157,49 +157,38 @@ def text():
 def image():
     """
     Handles image file encryption and decryption.
-    When decryption fails, the uploaded file is *not* deleted,
-    the password field is cleared, and the filename is displayed.
+    On failure, the uploaded file is preserved for retry.
+    On success, inputs are cleared.
     """
     message = ''
-    uploaded_filename = '' # Stores the filename to display in the HTML
+    uploaded_filename = ''
+    password_value = ''
     status = ''
-    action = request.form.get('action', 'encrypt') # Default action is encrypt
-    password_value = '' # Stores the password input, cleared on decryption failure
+    action = request.form.get('action', 'encrypt')
 
     if request.method == 'POST':
-        file = request.files.get('file') # Get the uploaded file object
+        file = request.files.get('file')
         password = request.form.get('password', '')
-        action = request.form.get('action') # Get the action (encrypt/decrypt) from the button clicked
-        
-        # Validate file and password input
+        action = request.form.get('action')
+
         if not file or file.filename == '':
             message = 'Please select a file.'
             status = 'error'
-        elif not password: # Password is required for both encryption and decryption
+        elif not password:
             message = 'Please enter a password.'
             status = 'error'
         else:
-            # Secure the filename to prevent directory traversal attacks
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            
+
             try:
-                # Always save the file initially.
-                # This ensures the file is available for processing or re-attempts.
                 file.save(file_path)
-                uploaded_filename = filename # Store the filename for display in the template
+                uploaded_filename = filename
             except PermissionError:
                 message = f"Permission denied: cannot save file to {file_path}. Check folder permissions."
                 status = 'error'
-                # Render template immediately on permission error
-                return render_template('image.html',
-                                    message=message,
-                                    action=action,
-                                    status=status,
-                                    uploaded_filename=uploaded_filename, # Pass the preserved filename
-                                    password_value=password_value)
+                return render_template('image.html', message=message, action=action, status=status, uploaded_filename=uploaded_filename, password_value=password_value)
 
-            # Read the content of the saved file
             with open(file_path, 'rb') as f:
                 data = f.read()
 
@@ -210,14 +199,11 @@ def image():
                     encrypted_path = os.path.join(app.config['ENCRYPTED_FOLDER'], encrypted_filename)
                     with open(encrypted_path, 'wb') as f:
                         f.write(encrypted)
-                    # Delete the original uploaded file only after successful encryption
-                    os.remove(file_path) 
-                    # Send the encrypted file back to the user for download
+                    os.remove(file_path)
                     return send_file(encrypted_path, as_attachment=True, download_name=encrypted_filename)
                 except Exception as e:
                     message = f'Encryption failed: {str(e)}'
                     status = 'error'
-                    # If encryption fails, clean up the original uploaded file
                     if os.path.exists(file_path):
                         os.remove(file_path)
 
@@ -225,55 +211,36 @@ def image():
                 try:
                     decrypted = decrypt_data(data, password)
                     if decrypted is not None:
-                        # Decryption was successful
-                        # Determine the original filename for the decrypted file
                         if filename.lower().endswith('.enc'):
-                            original_filename = filename[:-4] # Remove the '.enc' extension
-                            if not original_filename: # Handle edge case like "file.enc" where base is empty
-                                original_filename = 'decrypted_file'
+                            original_filename = filename[:-4] or 'decrypted_file'
                         else:
-                            original_filename = 'decrypted_' + filename # Prepend for non-.enc files
-
+                            original_filename = 'decrypted_' + filename
                         decrypted_path = os.path.join(app.config['DECRYPTED_FOLDER'], original_filename)
                         with open(decrypted_path, 'wb') as f:
                             f.write(decrypted)
-                        # Delete the original uploaded file (which was likely the .enc file)
-                        # only after successful decryption and saving the decrypted version.
-                        os.remove(file_path) 
-                        # Send the decrypted file back to the user for download
+                        os.remove(file_path)
                         return send_file(decrypted_path, as_attachment=True, download_name=original_filename)
                     else:
-                        # Decryption failed (e.g., wrong password, corrupted data header)
                         message = 'Decryption failed. Wrong password or data is corrupted.'
                         status = 'error'
-                        # *** IMPORTANT: The uploaded file (file_path) is NOT deleted here. ***
-                        # This allows the user to try again with the same file without re-uploading.
-                        password_value = '' # Clear the password field in the form
+                        password_value = ''
+                        uploaded_filename = filename  # Preserve for retry
                 except Exception as e:
-                    # Catch any other unexpected errors during the decryption process
                     message = f'Decryption failed: {str(e)}'
                     status = 'error'
-                    # *** IMPORTANT: The uploaded file (file_path) is NOT deleted here. ***
-                    password_value = '' # Clear the password field in the form
-            
-            # This final cleanup block handles cases where an error occurred AFTER file save
-            # but it's not a decryption failure (which intentionally keeps the file).
-            # For example, if an encryption attempt failed after saving the file.
+                    password_value = ''
+                    uploaded_filename = filename  # Preserve for retry
+
             if os.path.exists(file_path) and status == 'error' and action == 'encrypt':
                 os.remove(file_path)
 
-    # Render the HTML template with the current state:
-    # - message: any success or error message
-    # - action: the last attempted action (encrypt/decrypt)
-    # - status: 'error' if an error occurred
-    # - uploaded_filename: the name of the file that was last uploaded/processed
-    # - password_value: empty if decryption failed, otherwise whatever was entered
     return render_template('image.html',
-                         message=message,
-                         action=action,
-                         status=status,
-                         uploaded_filename=uploaded_filename,
-                         password_value=password_value)
+                           message=message,
+                           action=action,
+                           status=status,
+                           uploaded_filename=uploaded_filename,
+                           password_value=password_value)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000, debug=True)
